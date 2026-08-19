@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# Reports & screenshots (generated at runtime)
+reports/screenshots/*.png
+reports/*.html
+reports/*.pdf
+reports/*.xml
+reports/*.json
+
+# Phase 1 exploration screenshots
+screenshots/
+
+# Claude Code
+.claude/
+
+# Test artifacts left on NAS
+tests/

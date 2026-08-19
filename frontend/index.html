@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAS Auto Test Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<header>
+  <h1>⚙ NAS Auto Test Dashboard</h1>
+  <span class="badge-fw">WD My Cloud EX2 Ultra</span>
+  <span id="state-badge" class="state-IDLE">IDLE</span>
+  <span id="ws-dot" class="ws-dot" title="WebSocket"></span>
+</header>
+
+<main>
+  <!-- ── Left Panel ── -->
+  <div id="left-panel">
+
+    <!-- NAS Connection -->
+    <div class="panel-section">
+      <h3>NAS 連線</h3>
+      <div class="nas-row">
+        <select id="nas-select" style="flex:1">
+          <option value="">— 選擇或輸入 NAS IP —</option>
+        </select>
+        <button class="btn btn-scan" onclick="scanNAS()" title="掃描局域網">🔍 掃描</button>
+      </div>
+      <div class="nas-row" style="margin-top:6px">
+        <input type="text" id="nas-ip-input" placeholder="或直接輸入 IP，如 192.168.1.100" />
+      </div>
+      <div class="cred-row">
+        <input type="text"     id="nas-user" value="admin"     placeholder="帳號" />
+        <input type="password" id="nas-pass" value="123456789" placeholder="密碼" />
+      </div>
+    </div>
+
+    <!-- Execution Controls -->
+    <div class="panel-section">
+      <h3>執行控制</h3>
+      <div id="controls">
+        <button class="btn btn-start"  id="btn-start"  onclick="startTests()">▶ 開始</button>
+        <button class="btn btn-pause"  id="btn-pause"  onclick="pauseTests()"  disabled>⏸ 暫停</button>
+        <button class="btn btn-resume" id="btn-resume" onclick="resumeTests()" disabled>▶ 恢復</button>
+        <button class="btn btn-abort"  id="btn-abort"  onclick="abortTests()"  disabled>⏹ 中斷</button>
+      </div>
+    </div>
+
+    <!-- Test Tree -->
+    <div class="panel-section" style="border-bottom:none; padding-bottom:4px">
+      <h3>測試項目選擇
+        <span style="float:right; font-weight:400; font-size:10px; color:#4a5280; cursor:pointer" onclick="selectAll()">全選</span>
+        <span style="float:right; font-weight:400; font-size:10px; color:#4a5280; cursor:pointer; margin-right:8px" onclick="selectNone()">全清</span>
+      </h3>
+    </div>
+    <div id="test-tree"><!-- rendered by JS --></div>
+  </div>
+
+  <!-- ── Right Panel ── -->
+  <div id="right-panel">
+
+    <!-- Progress -->
+    <div id="progress-area">
+      <div class="progress-info">
+        <span id="progress-label">尚未開始</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <!-- Log viewer -->
+    <div id="log-area"></div>
+
+    <!-- Screenshot / Detail Panel -->
+    <div id="detail-panel" style="display:none">
+      <div id="detail-header">
+        <span id="detail-title"></span>
+        <span id="detail-result-badge"></span>
+        <button onclick="closeDetail()" style="margin-left:auto;background:none;border:none;color:#9aa5d9;font-size:16px;cursor:pointer">✕</button>
+      </div>
+      <div id="detail-body">
+        <div id="detail-msg"></div>
+        <div id="detail-screenshot-wrap">
+          <img id="detail-screenshot" src="" alt="screenshot" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Bar -->
+    <div id="report-bar">
+      <span id="pill-total" class="pill pill-total">總計 0</span>
+      <span id="pill-pass"  class="pill pill-pass">PASS 0</span>
+      <span id="pill-fail"  class="pill pill-fail">FAIL 0</span>
+      <span style="flex:1"></span>
+      <button class="btn btn-report" onclick="downloadReport('html')" title="含截圖 HTML 報告">⬇ HTML</button>
+      <button class="btn btn-report" onclick="downloadReport('pdf')"  title="含截圖 PDF 報告">⬇ PDF</button>
+      <button class="btn btn-report" onclick="downloadReport('junit')" title="JUnit XML（CI/CD）">⬇ JUnit XML</button>
+      <button class="btn btn-report" onclick="downloadReport('json')" title="JSON 原始資料">⬇ JSON</button>
+      <button class="btn btn-report" onclick="clearLog()">🗑 清除 Log</button>
+    </div>
+  </div>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
