@@ -69,8 +69,8 @@ async def _login_expect_error(nas_ip, nas_user, bad_pass, playwright):
     page = await ctx.new_page()
     await page.goto(f"http://{nas_ip}/", timeout=15000)
     await page.wait_for_load_state("networkidle", timeout=10000)
-    if nas_user:
-        await page.fill("#login_userName_text", nas_user)
+    # Always explicitly set username (NAS login page pre-fills 'admin' by default)
+    await page.fill("#login_userName_text", nas_user if nas_user else "")
     if bad_pass is not None:
         await page.fill("#login_pw_password", bad_pass)
     await page.click("#login_login_button")
