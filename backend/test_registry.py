@@ -980,7 +980,7 @@ async def f_ftp_06(nas_ip, nas_user, nas_pass):
 SSH_TEST_CONTENT = b"NAS Auto Test SSH verification file\nMD5 check: OK\n"
 SSH_TEST_FILENAME = "qa_ssh_test.txt"
 NAS_SHARE_PATH = "/shares/Public"  # WD EX2 Ultra path inside SSH session
-SSH_USER = "sshd"   # WD NAS SSH account (separate from web admin)
+SSH_USER = ""   # Set at runtime by main.py from UI input (ssh_user field)
 
 
 async def f_ssh_01(nas_ip, nas_user, nas_pass):

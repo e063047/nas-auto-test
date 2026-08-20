@@ -264,7 +264,7 @@ function selectNone() { document.querySelectorAll('input[type=checkbox]').forEac
 // ── NAS Scan ───────────────────────────────────────────────────────────────────
 async function scanNAS() {
   appendLog("INFO", "掃描局域網中，請稍候...");
-  const subnet = prompt("請輸入子網路前綴（如 192.168.135），留空則僅用 ARP 快速搜尋：", "192.168.135");
+  const subnet = prompt("請輸入子網路前綴（如 192.168.1），留空則僅用 ARP 快速搜尋：", "");
   const url = subnet ? `/api/scan?subnet=${encodeURIComponent(subnet)}` : "/api/scan";
   try {
     const res = await fetch(url);
@@ -290,19 +290,22 @@ async function scanNAS() {
 
 // ── Execution Control ──────────────────────────────────────────────────────────
 function getNasConfig() {
-  const ip   = document.getElementById("nas-ip-input").value.trim()
-             || document.getElementById("nas-select").value;
-  const user = document.getElementById("nas-user").value.trim();
-  const pass = document.getElementById("nas-pass").value;
-  return { ip, user, pass };
+  const ip      = document.getElementById("nas-ip-input").value.trim()
+                || document.getElementById("nas-select").value;
+  const user    = document.getElementById("nas-user").value.trim();
+  const pass    = document.getElementById("nas-pass").value;
+  const sshUser = document.getElementById("nas-ssh-user").value.trim();
+  return { ip, user, pass, sshUser };
 }
 
 async function startTests() {
   resultMap = {};
   refreshTestTree();
 
-  const { ip, user, pass } = getNasConfig();
-  if (!ip) { alert("請先選擇或輸入 NAS IP"); return; }
+  const { ip, user, pass, sshUser } = getNasConfig();
+  if (!ip)   { alert("請先選擇或輸入 NAS IP"); return; }
+  if (!user) { alert("請輸入帳號"); return; }
+  if (!pass) { alert("請輸入密碼"); return; }
 
   const ids = getSelectedTestIds();
   if (ids.length === 0) { alert("請至少勾選一個測試項目"); return; }
@@ -317,7 +320,11 @@ async function startTests() {
   await fetch("/api/start", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ nas_ip: ip, nas_user: user, nas_pass: pass, test_ids: ids })
+    body: JSON.stringify({
+      nas_ip: ip, nas_user: user, nas_pass: pass,
+      ssh_user: sshUser,
+      test_ids: ids
+    })
   });
 }
 

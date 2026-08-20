@@ -79,8 +79,9 @@ async def get_test_tree():
 
 class StartPayload(BaseModel):
     nas_ip: str
-    nas_user: str = "admin"
+    nas_user: str
     nas_pass: str
+    ssh_user: str = ""   # SSH account (may differ from web admin, e.g. 'sshd' on WD NAS)
     test_ids: List[str]
 
 
@@ -88,6 +89,8 @@ class StartPayload(BaseModel):
 async def start_tests(payload: StartPayload):
     if executor.state == State.RUNNING:
         raise HTTPException(status_code=409, detail="Tests already running")
+    import test_registry
+    test_registry.SSH_USER = payload.ssh_user or payload.nas_user
     await executor.start(
         payload.nas_ip, payload.nas_user, payload.nas_pass, payload.test_ids
     )
