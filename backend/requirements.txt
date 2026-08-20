@@ -5,4 +5,3 @@ aiofiles==25.1.0
 python-multipart==0.0.20
 playwright==1.60.0
 paramiko==3.5.0
-weasyprint>=60.0

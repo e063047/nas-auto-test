@@ -38,6 +38,14 @@
       <div class="cred-row" style="margin-top:4px">
         <input type="text" id="nas-ssh-user" placeholder="SSH 帳號（如 sshd，留空同上）" style="width:100%" />
       </div>
+      <div class="demo-toggle-row" style="margin-top:10px; display:flex; align-items:center; gap:8px">
+        <label style="display:flex; align-items:center; gap:6px; cursor:pointer; user-select:none">
+          <input type="checkbox" id="demo-mode-cb" onchange="onDemoToggle()" style="width:16px;height:16px;cursor:pointer" />
+          <span style="font-size:13px; color:#9aa5d9">Demo 模式</span>
+        </label>
+        <span id="demo-badge" style="display:none; background:#f39c12; color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:10px; letter-spacing:1px">DEMO</span>
+        <span style="font-size:11px; color:#5a6282">（無需 NAS，重播預錄結果）</span>
+      </div>
     </div>
 
     <!-- Execution Controls -->

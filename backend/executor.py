@@ -51,7 +51,7 @@ class Executor:
 
     # ── Control API ────────────────────────────────────────────────────────
 
-    async def start(self, nas_ip: str, nas_user: str, nas_pass: str, test_ids: List[str]):
+    async def start(self, nas_ip: str, nas_user: str, nas_pass: str, test_ids: List[str], demo: bool = False):
         if self.state == State.RUNNING:
             return
         self.nas_ip = nas_ip
@@ -61,7 +61,10 @@ class Executor:
         self._abort_flag = False
         self.results = []
         await self._set_state(State.RUNNING)
-        self._current_task = asyncio.create_task(self._run_suite(test_ids))
+        if demo:
+            self._current_task = asyncio.create_task(self._run_demo(test_ids))
+        else:
+            self._current_task = asyncio.create_task(self._run_suite(test_ids))
 
     def pause(self):
         """Graceful pause: set flag, current test case will finish first."""
@@ -149,6 +152,68 @@ class Executor:
         passed = sum(1 for r in self.results if r["result"] == TestResult.PASS)
         failed = sum(1 for r in self.results if r["result"] == TestResult.FAIL)
         await self._log(f"Suite complete. PASS={passed} FAIL={failed} TOTAL={total}")
+        await self._set_state(State.COMPLETED)
+        await self._emit("results", self.results)
+
+    # ── Demo Runner ────────────────────────────────────────────────────────
+
+    async def _run_demo(self, test_ids: List[str]):
+        """Simulate test execution using pre-recorded results. No NAS required."""
+        from demo_results import DEMO_MAP
+
+        total = len(test_ids)
+        await self._emit("progress", {"current": 0, "total": total})
+        await self._log(f"[DEMO MODE] Replaying {total} pre-recorded results (no NAS connection)")
+
+        try:
+            for idx, tid in enumerate(test_ids):
+                if self._abort_flag:
+                    await self._log("Demo aborted by user.", "WARN")
+                    await self._set_state(State.ABORTED)
+                    return
+
+                if self._pause_flag:
+                    await self._set_state(State.PAUSED)
+                    await self._log("Demo paused. Waiting for resume...", "WARN")
+                    while self._pause_flag and not self._abort_flag:
+                        await asyncio.sleep(0.5)
+                    if self._abort_flag:
+                        await self._set_state(State.ABORTED)
+                        return
+                    await self._set_state(State.RUNNING)
+                    await self._log("Demo resumed.", "INFO")
+
+                await self._emit("current_test", {"id": tid, "index": idx + 1, "total": total})
+                await self._log(f"[RUN ] ({idx+1}/{total}) {tid}")
+
+                rec = DEMO_MAP.get(tid)
+                if rec:
+                    # Simulate realistic execution time (capped at 2s for demo)
+                    delay = min(rec["duration"] * 0.3, 2.0)
+                    await asyncio.sleep(delay)
+                    result  = TestResult(rec["result"])
+                    msg     = rec["msg"]
+                    screenshot = f"{tid}.png"
+                    duration = rec["duration"]
+                else:
+                    await asyncio.sleep(0.5)
+                    result, msg, screenshot, duration = TestResult.SKIP, "Not in demo dataset", None, 0
+
+                self.results.append({
+                    "id": tid, "result": result, "msg": msg,
+                    "duration": duration, "screenshot": screenshot
+                })
+                level = "INFO" if result == TestResult.PASS else "ERROR"
+                await self._log(f"[{result.value}] {tid} ({duration}s) {msg}", level)
+                await self._emit("progress", {"current": idx + 1, "total": total})
+
+        except asyncio.CancelledError:
+            await self._set_state(State.ABORTED)
+            return
+
+        passed = sum(1 for r in self.results if r["result"] == TestResult.PASS)
+        failed = sum(1 for r in self.results if r["result"] == TestResult.FAIL)
+        await self._log(f"[DEMO] Complete. PASS={passed} FAIL={failed} TOTAL={total}")
         await self._set_state(State.COMPLETED)
         await self._emit("results", self.results)
 

@@ -23,6 +23,7 @@ from test_registry import TEST_TREE
 FRONTEND_DIR = Path(__file__).parent.parent / "frontend"
 REPORTS_DIR = Path(__file__).parent.parent / "reports"
 SCREENSHOT_DIR = REPORTS_DIR / "screenshots"
+DEMO_SCREENSHOT_DIR = Path(__file__).parent.parent / "demo" / "screenshots"
 REPORTS_DIR.mkdir(exist_ok=True)
 SCREENSHOT_DIR.mkdir(exist_ok=True)
 
@@ -83,18 +84,21 @@ class StartPayload(BaseModel):
     nas_pass: str
     ssh_user: str = ""   # SSH account (may differ from web admin, e.g. 'sshd' on WD NAS)
     test_ids: List[str]
+    demo: bool = False   # Demo mode: replay pre-recorded results without real NAS
 
 
 @app.post("/api/start")
 async def start_tests(payload: StartPayload):
     if executor.state == State.RUNNING:
         raise HTTPException(status_code=409, detail="Tests already running")
-    import test_registry
-    test_registry.SSH_USER = payload.ssh_user or payload.nas_user
+    if not payload.demo:
+        import test_registry
+        test_registry.SSH_USER = payload.ssh_user or payload.nas_user
     await executor.start(
-        payload.nas_ip, payload.nas_user, payload.nas_pass, payload.test_ids
+        payload.nas_ip, payload.nas_user, payload.nas_pass, payload.test_ids,
+        demo=payload.demo
     )
-    return {"status": "started", "count": len(payload.test_ids)}
+    return {"status": "started", "count": len(payload.test_ids), "demo": payload.demo}
 
 
 @app.post("/api/pause")
@@ -133,7 +137,10 @@ async def get_status():
 
 @app.get("/api/screenshot/{test_id}")
 async def get_screenshot(test_id: str):
+    # Check live screenshots first, fall back to pre-recorded demo screenshots
     path = SCREENSHOT_DIR / f"{test_id}.png"
+    if not path.exists():
+        path = DEMO_SCREENSHOT_DIR / f"{test_id}.png"
     if not path.exists():
         raise HTTPException(status_code=404, detail="Screenshot not found")
     return FileResponse(str(path), media_type="image/png")
@@ -143,6 +150,8 @@ def _screenshot_b64(filename: Optional[str]) -> Optional[str]:
     if not filename:
         return None
     path = SCREENSHOT_DIR / filename
+    if not path.exists():
+        path = DEMO_SCREENSHOT_DIR / filename
     if not path.exists():
         return None
     return base64.b64encode(path.read_bytes()).decode()

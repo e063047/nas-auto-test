@@ -3,6 +3,7 @@ let ws = null;
 let testTree = {};
 let resultMap = {};
 let currentState = "IDLE";
+let demoMode = false;
 
 // ── WebSocket ──────────────────────────────────────────────────────────────────
 function connectWS() {
@@ -261,6 +262,22 @@ function getSelectedTestIds() {
 function selectAll()  { document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = true); }
 function selectNone() { document.querySelectorAll('input[type=checkbox]').forEach(cb => cb.checked = false); }
 
+// ── Demo Mode ─────────────────────────────────────────────────────────────────
+function onDemoToggle() {
+  demoMode = document.getElementById("demo-mode-cb").checked;
+  const badge = document.getElementById("demo-badge");
+  badge.style.display = demoMode ? "inline-block" : "none";
+  // In demo mode NAS credentials are not required, dim them
+  const credInputs = ["nas-ip-input", "nas-user", "nas-pass", "nas-ssh-user"];
+  credInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.opacity = demoMode ? "0.4" : "1";
+  });
+  appendLog("INFO", demoMode
+    ? "Demo 模式已啟用 — 將重播預錄結果，不需要 NAS 連線"
+    : "Demo 模式已關閉 — 將連線至真實 NAS 執行測試");
+}
+
 // ── NAS Scan ───────────────────────────────────────────────────────────────────
 async function scanNAS() {
   appendLog("INFO", "掃描局域網中，請稍候...");
@@ -303,14 +320,18 @@ async function startTests() {
   refreshTestTree();
 
   const { ip, user, pass, sshUser } = getNasConfig();
-  if (!ip)   { alert("請先選擇或輸入 NAS IP"); return; }
-  if (!user) { alert("請輸入帳號"); return; }
-  if (!pass) { alert("請輸入密碼"); return; }
+
+  if (!demoMode) {
+    if (!ip)   { alert("請先選擇或輸入 NAS IP"); return; }
+    if (!user) { alert("請輸入帳號"); return; }
+    if (!pass) { alert("請輸入密碼"); return; }
+  }
 
   const ids = getSelectedTestIds();
   if (ids.length === 0) { alert("請至少勾選一個測試項目"); return; }
 
-  appendLog("INFO", `準備執行 ${ids.length} 個測試案例 → ${ip}`);
+  const target = demoMode ? "DEMO 模式（預錄結果）" : ip;
+  appendLog("INFO", `準備執行 ${ids.length} 個測試案例 → ${target}`);
   document.getElementById("progress-fill").style.width = "0%";
   document.getElementById("progress-pct").textContent = "0%";
   document.getElementById("pill-total").textContent = "總計 0";
@@ -321,8 +342,11 @@ async function startTests() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      nas_ip: ip, nas_user: user, nas_pass: pass,
+      nas_ip:   ip   || "demo",
+      nas_user: user || "demo",
+      nas_pass: pass || "demo",
       ssh_user: sshUser,
+      demo:     demoMode,
       test_ids: ids
     })
   });

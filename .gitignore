@@ -17,8 +17,12 @@ reports/*.pdf
 reports/*.xml
 reports/*.json
 
-# Phase 1 exploration screenshots
-screenshots/
+# Phase 1 exploration screenshots (root-level only)
+/screenshots/
+
+# Demo screenshots are tracked in git (needed for cloud deployment)
+!demo/screenshots/
+!demo/screenshots/*.png
 
 # Claude Code
 .claude/
