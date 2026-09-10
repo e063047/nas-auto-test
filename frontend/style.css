@@ -4,6 +4,7 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
   background: #1a1d2e;
   color: #e0e3ef;
+  min-height: 100vh;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -210,3 +211,86 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
 .pill-pass { background:#1a3d2b; color:#2ecc71; }
 .pill-fail { background:#3d1a1a; color:#e74c3c; }
 .pill-total { background:#1e2138; color:#9aa5d9; }
+
+/* ── Mobile RWD (≤768px) ─────────────────────────────── */
+@media (max-width: 768px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: auto;
+  }
+
+  header {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  header h1 { font-size: 15px; }
+
+  main {
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+    flex: none;
+  }
+
+  /* Left panel: 展開成全寬，高度自適應 */
+  #left-panel {
+    grid-row: unset;
+    border-right: none;
+    border-bottom: 2px solid #2d3154;
+    overflow: visible;
+    height: auto;
+  }
+
+  /* Test tree 固定最大高度可捲動 */
+  #test-tree {
+    flex: none;
+    max-height: 280px;
+    overflow-y: auto;
+  }
+
+  /* Right panel */
+  #right-panel {
+    overflow: visible;
+    flex: none;
+  }
+
+  /* Log area 固定高度 */
+  #log-area {
+    flex: none;
+    height: 220px;
+    overflow-y: auto;
+  }
+
+  /* Detail panel */
+  #detail-panel {
+    max-height: none;
+  }
+  #detail-body {
+    flex-direction: column;
+    gap: 12px;
+  }
+  #detail-msg { max-width: 100%; }
+
+  /* Report bar 換行排列 */
+  #report-bar {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 14px;
+  }
+  .btn-report { font-size: 12px; padding: 6px 10px; }
+
+  /* 執行控制按鈕放大，便於觸控 */
+  #controls { gap: 6px; }
+  #controls .btn { padding: 10px 16px; font-size: 14px; flex: 1; justify-content: center; min-width: 60px; }
+
+  /* 截圖最大寬 */
+  #detail-screenshot { max-width: 100%; }
+
+  /* Cred row 改單欄 */
+  .cred-row { grid-template-columns: 1fr; }
+
+  /* 掃描按鈕縮短 */
+  .btn-scan { white-space: nowrap; font-size: 12px; padding: 6px 10px; }
+}
