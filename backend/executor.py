@@ -5,8 +5,6 @@ import traceback
 from enum import Enum
 from typing import List, Dict, Any, Optional
 
-sys.path.insert(0, '/Users/winnielee/Library/Python/3.9/lib/python/site-packages')
-
 from ws_manager import manager
 
 

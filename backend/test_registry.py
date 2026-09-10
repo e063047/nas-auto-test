@@ -13,8 +13,6 @@ import tempfile
 import time
 from pathlib import Path
 
-sys.path.insert(0, '/Users/winnielee/Library/Python/3.9/lib/python/site-packages')
-
 from executor import TestResult
 
 SCREENSHOT_DIR = Path(__file__).parent.parent / "reports" / "screenshots"

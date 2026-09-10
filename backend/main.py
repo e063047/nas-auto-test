@@ -7,8 +7,6 @@ import base64
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
-sys.path.insert(0, '/Users/winnielee/Library/Python/3.9/lib/python/site-packages')
-
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, JSONResponse
@@ -237,7 +235,6 @@ async def download_pdf_report():
     if not executor.results:
         raise HTTPException(status_code=404, detail="No results available")
 
-    sys.path.insert(0, '/Users/winnielee/Library/Python/3.9/lib/python/site-packages')
     from playwright.async_api import async_playwright
 
     html = _build_html_report(executor.results, executor.nas_ip, with_screenshots=True)
