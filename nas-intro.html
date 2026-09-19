@@ -104,6 +104,7 @@ section{padding-block:72px}
 
 /* feature grid */
 .alt{background:var(--bg-alt)}
+.sep{border-top:1px solid var(--line)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
 .mod{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 20px 18px;display:grid;gap:6px;align-content:start}
 .mod .n{font-size:40px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
@@ -196,10 +197,10 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
   <div class="wrap">
     <a class="logo" href="#top"><i></i>NAS Auto Test</a>
     <ul>
+      <li><a href="#hardware">硬體架構</a></li>
       <li><a href="#new">最新功能</a></li>
       <li><a href="#coverage">測試涵蓋</a></li>
       <li><a href="#pause">執行控制</a></li>
-      <li><a href="#hardware">硬體架構</a></li>
       <li><a href="#guide">使用指南</a></li>
       <li><a href="#svc">平台服務</a></li>
     </ul>
@@ -242,75 +243,6 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
           </div>
           <div style="font-size:11px;opacity:.5">示意畫面，非實際執行結果</div>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="new">
-  <div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Highlights</span><h2>平台重點功能</h2></div><span style="color:var(--ink-2);font-size:14px">左右滑動查看更多</span></div>
-    <div class="rail">
-      <article>
-        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><circle cx="48" cy="48" r="8" fill="currentColor"/><circle cx="48" cy="48" r="24"/><circle cx="48" cy="48" r="40" opacity=".5"/></svg></div>
-        <div class="txt"><span class="tag">LAN DISCOVERY</span><h3>自動搜尋區網 NAS</h3><p>由後端掃描區網並推播結果，前端下拉選單直接選擇，不必手動查 IP。</p></div>
-      </article>
-      <article>
-        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><rect x="24" y="20" width="14" height="56" rx="3" fill="currentColor"/><rect x="58" y="20" width="14" height="56" rx="3" fill="currentColor"/></svg></div>
-        <div class="txt"><span class="tag">GRACEFUL PAUSE</span><h3>優雅暫停</h3><p>按下暫停後，當前 Test Case 會完整跑完才停住，保護 NAS 檔案系統的完整性。</p></div>
-      </article>
-      <article>
-        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 30h68M14 48h68M14 66h68"/><circle cx="30" cy="30" r="5" fill="currentColor"/><circle cx="60" cy="48" r="5" fill="currentColor"/><circle cx="40" cy="66" r="5" fill="currentColor"/></svg></div>
-        <div class="txt"><span class="tag">LIVE LOG</span><h3>即時 Log 與進度</h3><p>透過 WebSocket 串流執行狀態、Log 與進度條，過程一目了然。</p></div>
-      </article>
-      <article>
-        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M26 12h30l16 16v56H26z"/><path d="M56 12v16h16M38 50h22M38 62h22M38 74h14"/></svg></div>
-        <div class="txt"><span class="tag">REPORTS</span><h3>多格式報告</h3><p>輸出 HTML / PDF 供閱讀，同步保留 JSON 與 JUnit XML 原始資料給 CI 使用。</p></div>
-      </article>
-    </div>
-    <div class="rail-ctl" data-for="rail">
-      <button type="button" data-dir="-1" aria-label="上一張">‹</button>
-      <div class="dots"></div>
-      <button type="button" data-dir="1" aria-label="下一張">›</button>
-    </div>
-  </div>
-</section>
-
-<section id="coverage" class="alt">
-  <div class="wrap">
-    <div class="sec-head"><div><span class="eyebrow">Coverage</span><h2>測試涵蓋範圍</h2></div><p style="color:var(--ink-2);max-width:30em;font-size:15px">依 TEST_PLAN.md 劃分為 BAT 快速冒煙、FULL 完整測試與 UX 可用性測試。</p></div>
-    <div class="grid">
-      <div class="mod hl"><div class="n">12<small>案例</small></div><h3>BAT 冒煙測試</h3><div class="ids">BAT-01 … BAT-07</div></div>
-      <div class="mod"><div class="n">7<small>案例</small></div><h3>認證與 Session</h3><div class="ids">F-AUTH</div></div>
-      <div class="mod"><div class="n">6<small>案例</small></div><h3>Dashboard</h3><div class="ids">F-DASH</div></div>
-      <div class="mod"><div class="n">4<small>案例</small></div><h3>使用者管理</h3><div class="ids">F-USR</div></div>
-      <div class="mod"><div class="n">3<small>案例</small></div><h3>共享資料夾</h3><div class="ids">F-SHR</div></div>
-      <div class="mod"><div class="n">4<small>案例</small></div><h3>儲存 / 磁碟</h3><div class="ids">F-STR · F-DSK</div></div>
-      <div class="mod"><div class="n">1<small>案例</small></div><h3>General Settings</h3><div class="ids">F-GEN</div></div>
-      <div class="mod"><div class="n">4<small>案例</small></div><h3>FTP</h3><div class="ids">含 MD5 校驗</div></div>
-      <div class="mod"><div class="n">3<small>案例</small></div><h3>SSH / SFTP</h3><div class="ids">含 MD5 校驗</div></div>
-      <div class="mod"><div class="n">4<small>案例</small></div><h3>SMB</h3><div class="ids">含 MD5 校驗</div></div>
-      <div class="mod"><div class="n">3<small>案例</small></div><h3>NFS</h3><div class="ids">含 MD5 校驗</div></div>
-      <div class="mod"><div class="n">6<small>案例</small></div><h3>韌體升級</h3><div class="ids">F-FW</div></div>
-      <div class="mod"><div class="n">2<small>案例</small></div><h3>UX / 可用性</h3><div class="ids">UX-01 · UX-10</div></div>
-    </div>
-    <div class="total"><span>合計</span><b>59</b><span>個測試案例　BAT 12 ＋ FULL 45 ＋ UX 2</span></div>
-  </div>
-</section>
-
-<section id="pause">
-  <div class="wrap">
-    <div class="pause">
-      <div>
-        <span class="eyebrow" style="color:#2997ff">Execution State Machine</span>
-        <h2>開始、暫停、恢復、中斷</h2>
-        <p>暫停不會打斷正在跑的測試。當前 Test Case 完整結束後，引擎才停在下一支之前，NAS 不會停在寫到一半的狀態。</p>
-      </div>
-      <div class="tl" aria-label="Graceful Pause 時間軸示意">
-        <div><span>Case N</span><span class="bar"><i class="g"></i></span></div>
-        <div><span>按下暫停 ▸</span><span class="bar"><i class="h"></i></span></div>
-        <div><span>Case N+1</span><span class="bar"><i class="z"></i></span></div>
-        <div class="note">Case N 跑完後 hold 住，按「恢復」才執行 Case N+1</div>
       </div>
     </div>
   </div>
@@ -360,7 +292,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
       <text x="316" y="245" class="mono">Ping·mDNS·UPnP·ARP</text>
       <rect x="450" y="204" width="136" height="52" rx="8" class="inner"/>
       <text x="462" y="226" class="ttl" style="font-size:13px">測試執行器</text>
-      <text x="462" y="245" class="mono">Graceful Pause</text>
+      <text x="462" y="245" class="mono">暫停／恢復</text>
       <rect x="304" y="268" width="136" height="52" rx="8" class="inner"/>
       <text x="316" y="290" class="ttl" style="font-size:13px">Playwright</text>
       <text x="316" y="309" class="mono">驅動 Web UI</text>
@@ -422,6 +354,75 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
   </div>
 </section>
 
+<section id="new" class="sep">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Highlights</span><h2>平台重點功能</h2></div><span style="color:var(--ink-2);font-size:14px">左右滑動查看更多</span></div>
+    <div class="rail">
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><circle cx="48" cy="48" r="8" fill="currentColor"/><circle cx="48" cy="48" r="24"/><circle cx="48" cy="48" r="40" opacity=".5"/></svg></div>
+        <div class="txt"><span class="tag">LAN DISCOVERY</span><h3>自動搜尋區網 NAS</h3><p>由後端掃描區網並推播結果，前端下拉選單直接選擇，不必手動查 IP。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><rect x="24" y="20" width="14" height="56" rx="3" fill="currentColor"/><rect x="58" y="20" width="14" height="56" rx="3" fill="currentColor"/></svg></div>
+        <div class="txt"><span class="tag">PAUSE / RESUME</span><h3>靈活暫停／恢復功能</h3><p>按下暫停後，當前 Test Case 會完整跑完才停住，保護 NAS 檔案系統的完整性。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 30h68M14 48h68M14 66h68"/><circle cx="30" cy="30" r="5" fill="currentColor"/><circle cx="60" cy="48" r="5" fill="currentColor"/><circle cx="40" cy="66" r="5" fill="currentColor"/></svg></div>
+        <div class="txt"><span class="tag">LIVE LOG</span><h3>即時 Log 與進度</h3><p>透過 WebSocket 串流執行狀態、Log 與進度條，過程一目了然。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M26 12h30l16 16v56H26z"/><path d="M56 12v16h16M38 50h22M38 62h22M38 74h14"/></svg></div>
+        <div class="txt"><span class="tag">REPORTS</span><h3>多格式報告</h3><p>輸出 HTML / PDF 供閱讀，同步保留 JSON 與 JUnit XML 原始資料給 CI 使用。</p></div>
+      </article>
+    </div>
+    <div class="rail-ctl" data-for="rail">
+      <button type="button" data-dir="-1" aria-label="上一張">‹</button>
+      <div class="dots"></div>
+      <button type="button" data-dir="1" aria-label="下一張">›</button>
+    </div>
+  </div>
+</section>
+
+<section id="coverage" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Coverage</span><h2>測試涵蓋範圍</h2></div><p style="color:var(--ink-2);max-width:30em;font-size:15px">依 TEST_PLAN.md 劃分為 BAT Smoke Testing、FULL 完整測試與 UX 可用性測試。</p></div>
+    <div class="grid">
+      <div class="mod hl"><div class="n">12<small>案例</small></div><h3>BAT Smoke Testing</h3><div class="ids">BAT-01 … BAT-07</div></div>
+      <div class="mod"><div class="n">7<small>案例</small></div><h3>認證與 Session</h3><div class="ids">F-AUTH</div></div>
+      <div class="mod"><div class="n">6<small>案例</small></div><h3>Dashboard</h3><div class="ids">F-DASH</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>使用者管理</h3><div class="ids">F-USR</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>共享資料夾</h3><div class="ids">F-SHR</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>儲存 / 磁碟</h3><div class="ids">F-STR · F-DSK</div></div>
+      <div class="mod"><div class="n">1<small>案例</small></div><h3>General Settings</h3><div class="ids">F-GEN</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>FTP</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>SSH / SFTP</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>SMB</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>NFS</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">6<small>案例</small></div><h3>韌體升級</h3><div class="ids">F-FW</div></div>
+      <div class="mod"><div class="n">2<small>案例</small></div><h3>UX / 可用性</h3><div class="ids">UX-01 · UX-10</div></div>
+    </div>
+    <div class="total"><span>合計</span><b>59</b><span>個測試案例　BAT 12 ＋ FULL 45 ＋ UX 2</span></div>
+  </div>
+</section>
+
+<section id="pause">
+  <div class="wrap">
+    <div class="pause">
+      <div>
+        <span class="eyebrow" style="color:#2997ff">Execution State Machine</span>
+        <h2>開始、暫停、恢復、中斷</h2>
+        <p>暫停不會打斷正在跑的測試。當前 Test Case 完整結束後，引擎才停在下一支之前，NAS 不會停在寫到一半的狀態。</p>
+      </div>
+      <div class="tl" aria-label="暫停／恢復時間軸示意">
+        <div><span>Case N</span><span class="bar"><i class="g"></i></span></div>
+        <div><span>按下暫停 ▸</span><span class="bar"><i class="h"></i></span></div>
+        <div><span>Case N+1</span><span class="bar"><i class="z"></i></span></div>
+        <div class="note">Case N 跑完後 hold 住，按「恢復」才執行 Case N+1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="guide" class="alt">
   <div class="wrap">
     <div class="sec-head"><div><span class="eyebrow">Quick Start</span><h2>四步驟完成一次驗證</h2></div></div>
@@ -461,7 +462,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
 <footer>
   <div class="wrap">
     <div class="fcols">
-      <div><h4>測試</h4><ul><li>BAT 冒煙測試</li><li>FULL 完整測試</li><li>UX 可用性</li></ul></div>
+      <div><h4>測試</h4><ul><li>BAT Smoke Testing</li><li>FULL 完整測試</li><li>UX 可用性</li></ul></div>
       <div><h4>後端</h4><ul><li>Python · FastAPI</li><li>Asyncio</li><li>WebSocket</li><li>Playwright</li></ul></div>
       <div><h4>協定</h4><ul><li>SSH / SFTP</li><li>FTP</li><li>SMB</li><li>NFS</li></ul></div>
       <div><h4>報告</h4><ul><li>HTML</li><li>PDF</li><li>JSON</li><li>JUnit XML</li></ul></div>
