@@ -147,6 +147,29 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
 .fcols ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;color:var(--foot-2);font-family:var(--mono);font-size:12.5px}
 .fbot{margin-top:40px;padding-top:20px;border-top:1px solid var(--foot-line);color:var(--foot-2);font-size:12.5px}
 
+/* topology */
+.topo-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+.topo{display:block;min-width:740px;width:100%;height:auto}
+.topo text{font-family:var(--font);fill:var(--ink)}
+.topo .sub{fill:var(--ink-2);font-size:12px}
+.topo .ttl{font-size:15px;font-weight:700}
+.topo .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-2)}
+.topo .box{fill:var(--bg-alt);stroke:var(--line);stroke-width:1.2}
+.topo .inner{fill:var(--bg);stroke:var(--line);stroke-width:1}
+.topo .host{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.topo .lan{stroke:var(--accent);stroke-width:3;fill:none}
+.topo .wire{stroke:var(--ink-2);stroke-width:1.6;fill:none}
+.topo .dash{stroke:var(--ink-2);stroke-width:1.6;fill:none;stroke-dasharray:6 5}
+.topo .lbl{fill:var(--bg);stroke:var(--line);stroke-width:1}
+.topo .led{fill:var(--pass)}
+.topo .arrow{fill:var(--ink-2)}
+.topo .arrow-a{fill:var(--accent)}
+.topo-note{margin-top:14px;display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--mono);font-size:12px;padding:5px 12px;border-radius:999px;background:var(--bg-alt);color:var(--ink-2);border:1px solid var(--line)}
+.chip b{color:var(--ink);font-weight:500}
+.topo-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:28px}
+.topo-facts h3{font-size:16px;font-weight:700;margin-bottom:4px}
+.topo-facts p{font-size:14.5px;color:var(--ink-2)}
 @media (max-width:1024px){
   .guide{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;padding-bottom:14px}
   .guide::-webkit-scrollbar{display:none}
@@ -176,6 +199,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
       <li><a href="#new">最新功能</a></li>
       <li><a href="#coverage">測試涵蓋</a></li>
       <li><a href="#pause">執行控制</a></li>
+      <li><a href="#hardware">硬體架構</a></li>
       <li><a href="#guide">使用指南</a></li>
       <li><a href="#svc">平台服務</a></li>
     </ul>
@@ -288,6 +312,112 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
         <div><span>Case N+1</span><span class="bar"><i class="z"></i></span></div>
         <div class="note">Case N 跑完後 hold 住，按「恢復」才執行 Case N+1</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<section id="hardware">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Hardware Setup</span><h2>硬體架設配置圖</h2></div><span style="color:var(--ink-2);font-size:14px">圖可左右滑動</span></div>
+    <div class="topo-scroll">
+    <svg class="topo" viewBox="0 0 1000 480" role="img" aria-labelledby="topo-t topo-d">
+      <title id="topo-t">硬體架設配置圖</title>
+      <desc id="topo-d">操作端與 CI/CD 連到測試主機，測試主機經區網交換器透過 HTTP、SSH、FTP、SMB、NFS 測試 NAS。</desc>
+      <defs>
+        <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arrow"/></marker>
+        <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arrow-a"/></marker>
+      </defs>
+
+      <!-- zone label -->
+      <rect x="230" y="20" width="750" height="440" rx="18" fill="none" stroke="var(--line)" stroke-dasharray="4 6"/>
+      <text x="250" y="46" class="mono">同一個局域網 (LAN)　測試機與 NAS 須在同網段</text>
+
+      <!-- operator -->
+      <rect x="20" y="70" width="180" height="150" rx="14" class="box"/>
+      <text x="110" y="100" text-anchor="middle" class="ttl">操作端</text>
+      <rect x="52" y="116" width="116" height="76" rx="9" class="inner"/>
+      <rect x="60" y="124" width="100" height="56" rx="4" fill="var(--accent-soft)" stroke="none"/>
+      <path d="M68 164l16-14 14 10 18-20 34 24" transform="translate(-6,-4) scale(.9)" stroke="var(--accent)" stroke-width="2" fill="none"/>
+      <circle cx="110" cy="187" r="2.2" fill="var(--ink-2)"/>
+      <text x="110" y="210" text-anchor="middle" class="sub">iPad · 筆電 · 手機</text>
+
+      <!-- CI -->
+      <rect x="20" y="290" width="180" height="120" rx="14" class="box"/>
+      <text x="110" y="320" text-anchor="middle" class="ttl">CI/CD 或開發者</text>
+      <rect x="50" y="336" width="120" height="44" rx="6" class="inner"/>
+      <text x="62" y="363" class="mono">$ pytest / CLI</text>
+      <text x="110" y="398" text-anchor="middle" class="sub">Headless · 單支除錯</text>
+
+      <!-- host -->
+      <rect x="280" y="70" width="330" height="340" rx="16" class="host"/>
+      <text x="445" y="100" text-anchor="middle" class="ttl">測試主機</text>
+      <text x="445" y="120" text-anchor="middle" class="sub">macOS 12+ 或 Ubuntu 20.04+ · Python 3.9+</text>
+      <rect x="304" y="140" width="282" height="52" rx="8" class="inner"/>
+      <text x="320" y="162" class="ttl" style="font-size:14px">FastAPI + Asyncio 引擎</text>
+      <text x="320" y="181" class="mono">Port 8765 · WebSocket 串流 · 狀態機</text>
+      <rect x="304" y="204" width="136" height="52" rx="8" class="inner"/>
+      <text x="316" y="226" class="ttl" style="font-size:13px">LAN 掃描器</text>
+      <text x="316" y="245" class="mono">Ping·mDNS·UPnP·ARP</text>
+      <rect x="450" y="204" width="136" height="52" rx="8" class="inner"/>
+      <text x="462" y="226" class="ttl" style="font-size:13px">測試執行器</text>
+      <text x="462" y="245" class="mono">Graceful Pause</text>
+      <rect x="304" y="268" width="136" height="52" rx="8" class="inner"/>
+      <text x="316" y="290" class="ttl" style="font-size:13px">Playwright</text>
+      <text x="316" y="309" class="mono">驅動 Web UI</text>
+      <rect x="450" y="268" width="136" height="52" rx="8" class="inner"/>
+      <text x="462" y="290" class="ttl" style="font-size:13px">協定客戶端</text>
+      <text x="462" y="309" class="mono">SSH·FTP·SMB·NFS</text>
+      <rect x="304" y="332" width="282" height="52" rx="8" class="inner"/>
+      <text x="320" y="354" class="ttl" style="font-size:13px">報告產生器</text>
+      <text x="320" y="373" class="mono">HTML · PDF · JSON · JUnit XML → reports/</text>
+
+      <!-- operator -> host -->
+      <path d="M200 145H280" class="wire" marker-end="url(#ah)" marker-start="url(#ah)"/>
+      <rect x="203" y="98" width="74" height="34" rx="6" class="lbl"/>
+      <text x="240" y="113" text-anchor="middle" class="mono">HTTP</text>
+      <text x="240" y="126" text-anchor="middle" class="mono">:8765</text>
+      <path d="M200 350H280" class="wire" marker-end="url(#ah)"/>
+      <text x="240" y="342" text-anchor="middle" class="mono">CLI</text>
+
+      <!-- host -> switch -->
+      <path d="M610 240H700" class="lan" marker-end="url(#aa)" marker-start="url(#aa)"/>
+
+      <!-- switch -->
+      <rect x="700" y="205" width="90" height="70" rx="10" class="box"/>
+      <text x="745" y="232" text-anchor="middle" class="ttl" style="font-size:13px">交換器</text>
+      <text x="745" y="248" text-anchor="middle" class="sub" style="font-size:11px">/ 路由器</text>
+      <circle cx="716" cy="263" r="3" class="led"/><circle cx="730" cy="263" r="3" class="led"/><circle cx="744" cy="263" r="3" class="led"/><circle cx="758" cy="263" r="3" class="led"/><circle cx="772" cy="263" r="3" class="led"/>
+
+      <!-- switch -> NAS -->
+      <path d="M790 240H850" class="lan" marker-end="url(#aa)" marker-start="url(#aa)"/>
+
+      <!-- NAS -->
+      <rect x="850" y="150" width="120" height="180" rx="12" class="box"/>
+      <text x="910" y="176" text-anchor="middle" class="ttl">NAS</text>
+      <text x="910" y="193" text-anchor="middle" class="sub" style="font-size:11px">WD My Cloud</text>
+      <text x="910" y="207" text-anchor="middle" class="sub" style="font-size:11px">EX2 Ultra</text>
+      <rect x="866" y="220" width="88" height="34" rx="5" class="inner"/><circle cx="878" cy="237" r="3.5" class="led"/><rect x="890" y="232" width="52" height="10" rx="2" fill="var(--line)"/>
+      <rect x="866" y="262" width="88" height="34" rx="5" class="inner"/><circle cx="878" cy="279" r="3.5" class="led"/><rect x="890" y="274" width="52" height="10" rx="2" fill="var(--line)"/>
+      <text x="910" y="318" text-anchor="middle" class="mono">2-Bay</text>
+
+      <!-- protocol callout -->
+      <path d="M910 330V400" class="dash"/>
+      <rect x="626" y="398" width="354" height="50" rx="10" class="lbl"/>
+      <text x="640" y="418" class="mono">測試主機→NAS：HTTP/S·SSH/SFTP·FTP·SMB·NFS</text>
+      <text x="640" y="436" class="mono">NAS→測試主機：ARP·mDNS·UPnP 掃描回應</text>
+    </svg>
+    </div>
+    <div class="topo-note">
+      <span class="chip"><b>HTTP/S</b> Web UI 驗證</span>
+      <span class="chip"><b>SSH/SFTP</b> 帳號 sshd</span>
+      <span class="chip"><b>FTP</b> 上下傳＋MD5</span>
+      <span class="chip"><b>SMB</b> mount_smbfs</span>
+      <span class="chip"><b>NFS</b> mount_nfs</span>
+    </div>
+    <div class="topo-facts">
+      <div><h3>單一入口</h3><p>測試人員只需一個瀏覽器；同局域網的其他電腦與 iPad 都能連到測試主機的 8765 埠。</p></div>
+      <div><h3>由外部連線測試</h3><p>測試主機透過 HTTP、SSH、FTP、SMB、NFS 從外部連到 NAS 進行驗證。</p></div>
+      <div><h3>同網段是前提</h3><p>測試主機與 NAS 必須在同一局域網，掃描與 SMB/NFS 掛載才能運作。</p></div>
     </div>
   </div>
 </section>
