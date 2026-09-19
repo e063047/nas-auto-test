@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>NAS 自動化測試平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap">
+<style>
+html{color-scheme:light dark;-webkit-text-size-adjust:100%}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+
+:root{
+  --bg:#ffffff; --bg-alt:#f5f5f7; --ink:#1d1d1f; --ink-2:#6e6e73; --line:#d2d2d7;
+  --accent:#0071e3; --accent-ink:#ffffff; --accent-soft:#e8f1fc;
+  --dark:#1d1d1f; --dark-ink:#f5f5f7; --pass:#34c759; --warn:#ff9f0a; --fail:#ff3b30;
+  --foot:#f5f5f7; --foot-ink:#1d1d1f; --foot-2:#6e6e73; --foot-line:#d2d2d7;
+  --font:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#000000; --bg-alt:#161617; --ink:#f5f5f7; --ink-2:#a1a1a6; --line:#424245;
+  --accent:#2997ff; --accent-ink:#ffffff; --accent-soft:#0a2540;
+  --dark:#1d1d1f; --dark-ink:#f5f5f7; --pass:#30d158; --warn:#ff9f0a; --fail:#ff453a;
+  --foot:#161617; --foot-ink:#f5f5f7; --foot-2:#a1a1a6; --foot-line:#424245;
+}}
+:root[data-theme="dark"]{
+  --bg:#000000; --bg-alt:#161617; --ink:#f5f5f7; --ink-2:#a1a1a6; --line:#424245;
+  --accent:#2997ff; --accent-ink:#ffffff; --accent-soft:#0a2540;
+  --dark:#1d1d1f; --dark-ink:#f5f5f7; --pass:#30d158; --warn:#ff9f0a; --fail:#ff453a;
+  --foot:#161617; --foot-ink:#f5f5f7; --foot-2:#a1a1a6; --foot-line:#424245;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+h1,h2,h3{text-wrap:balance;line-height:1.25;margin:0}
+p{margin:0}
+.wrap{max-width:1200px;margin-inline:auto;padding-inline:20px}
+section{padding-block:72px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:32px}
+.sec-head h2{font-size:clamp(26px,3.4vw,38px);font-weight:700}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--bg);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:28px;height:64px}
+.logo{font-weight:900;font-size:18px;letter-spacing:.02em;display:flex;align-items:center;gap:10px;white-space:nowrap}
+.logo i{width:22px;height:22px;border-radius:5px;background:var(--accent);display:inline-block;position:relative}
+.logo i::after{content:"";position:absolute;inset:6px;border:2px solid var(--accent-ink);border-radius:2px}
+.nav ul{display:flex;gap:24px;list-style:none;margin:0 0 0 12px;padding:0;font-size:15px;color:var(--ink-2)}
+.nav ul a:hover{color:var(--ink)}
+.nav .sp{flex:1}
+.btn{display:inline-block;padding:10px 22px;border-radius:999px;font-weight:500;font-size:15px;border:1px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;font-family:inherit}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn:hover{filter:brightness(1.08)}
+
+/* hero */
+.hero{padding-block:56px 72px;background:var(--bg-alt)}
+.hero .wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,60px);font-weight:900;letter-spacing:-.01em;margin-block:14px 18px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero p.lead{color:var(--ink-2);font-size:18px;max-width:34em}
+.hero .cta{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.mock{background:var(--dark);color:var(--dark-ink);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.22);font-size:13px}
+.mock .bar{display:flex;align-items:center;gap:6px;padding:10px 14px;background:rgba(255,255,255,.06)}
+.mock .bar b{width:10px;height:10px;border-radius:50%;background:#ffffff33}
+.mock .bar span{margin-left:10px;font-family:var(--mono);font-size:11px;opacity:.6}
+.mock .body{display:grid;grid-template-columns:150px 1fr;min-height:300px}
+.mock .side{padding:14px;border-right:1px solid #ffffff14;display:grid;gap:8px;align-content:start;font-size:12px}
+.mock .side .f{background:#ffffff0d;border-radius:6px;padding:7px 9px;font-family:var(--mono);font-size:11px}
+.mock .side label{display:flex;gap:7px;align-items:center;opacity:.9}
+.mock .side label::before{content:"";width:10px;height:10px;border:1.5px solid #2997ff;border-radius:2px;background:#2997ff}
+.mock .side label.off::before{background:transparent;border-color:#ffffff55}
+.mock .main{padding:14px;display:grid;gap:10px;align-content:start}
+.ctl{display:flex;gap:6px;flex-wrap:wrap}
+.ctl span{padding:4px 12px;border-radius:5px;background:#ffffff14;font-size:12px}
+.ctl span.on{background:#2997ff;color:#ffffff;font-weight:700}
+.prog{height:6px;border-radius:3px;background:#ffffff18;overflow:hidden}
+.prog i{display:block;height:100%;width:64%;background:#2997ff}
+.log{font-family:var(--mono);font-size:11px;line-height:1.75;background:#00000040;border-radius:8px;padding:10px 12px;overflow:hidden;white-space:nowrap}
+.log .p{color:#34c759}.log .r{color:#ff9f0a}.log .f{color:#ff453a}.log .d{opacity:.5}
+
+/* carousel */
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;cursor:grab}
+.rail::-webkit-scrollbar{display:none}
+.rail.drag{cursor:grabbing;scroll-snap-type:none;user-select:none}
+.rail-ctl{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:8px}
+.rail-ctl button{width:44px;height:44px;border-radius:50%;border:0;background:var(--bg-alt);color:var(--ink);font-size:18px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.rail-ctl button:disabled{opacity:.35;cursor:default}
+.dots{display:flex;gap:8px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--line);transition:background .2s,width .2s}
+.dots i.on{background:var(--ink-2);width:22px;border-radius:4px}
+.alt .rail-ctl button{background:var(--bg)}
+.rail>article{flex:0 0 min(360px,84%);scroll-snap-align:start;background:var(--bg-alt);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.rail .vis{height:190px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.rail .txt{padding:22px 22px 26px;display:grid;gap:8px}
+.rail h3{font-size:20px;font-weight:700}
+.rail p{color:var(--ink-2);font-size:15px}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--accent)}
+
+/* feature grid */
+.alt{background:var(--bg-alt)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.mod{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:20px 20px 18px;display:grid;gap:6px;align-content:start}
+.mod .n{font-size:40px;font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
+.mod .n small{font-size:14px;font-weight:400;color:var(--ink-2);margin-left:4px}
+.mod h3{font-size:16px;font-weight:500}
+.mod .ids{font-family:var(--mono);font-size:11px;color:var(--ink-2)}
+.mod.hl{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.mod.hl .n small,.mod.hl .ids{color:inherit;opacity:.8}
+.total{margin-top:18px;display:flex;justify-content:flex-end;gap:10px;align-items:baseline;color:var(--ink-2)}
+.total b{font-size:32px;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* guide */
+.guide{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.guide article{display:grid;gap:12px;align-content:start}
+.guide .thumb{aspect-ratio:16/10;border-radius:12px;background:var(--bg-alt);border:1px solid var(--line);padding:16px;display:grid;align-content:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--ink-2)}
+.guide .thumb .pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--accent-soft);color:var(--accent);width:max-content}
+.guide h3{font-size:18px;font-weight:700}
+.guide p{font-size:15px;color:var(--ink-2)}
+.pause{background:var(--dark);color:var(--dark-ink);border-radius:18px;padding:36px;display:grid;grid-template-columns:1fr 1.2fr;gap:32px;align-items:center}
+.pause h2{font-size:clamp(24px,3vw,34px);font-weight:700;margin-bottom:12px}
+.pause p{opacity:.8}
+.tl{display:grid;gap:8px;font-family:var(--mono);font-size:12px}
+.tl div{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center}
+.tl .bar{height:22px;border-radius:5px;background:#ffffff14;position:relative}
+.tl .bar i{position:absolute;inset:0 auto 0 0;border-radius:5px}
+.tl .g{background:#34c759;width:100%}.tl .h{background:#ff9f0a;width:55%}.tl .z{background:transparent;border:1px dashed #ffffff55;width:100%}
+.tl .note{grid-column:1/-1;opacity:.6;font-size:11px}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;border-block:1px solid var(--line)}
+.svc>div{padding:32px 24px;border-right:1px solid var(--line);display:grid;gap:8px;align-content:start}
+.svc>div:last-child{border-right:0}
+.svc svg{color:var(--accent)}
+.svc h3{font-size:17px;font-weight:700}
+.svc p{font-size:14.5px;color:var(--ink-2)}
+
+/* footer */
+footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font-size:14px}
+.fcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:28px}
+.fcols h4{margin:0 0 12px;font-size:14px;font-weight:700}
+.fcols ul{list-style:none;margin:0;padding:0;display:grid;gap:8px;color:var(--foot-2);font-family:var(--mono);font-size:12.5px}
+.fbot{margin-top:40px;padding-top:20px;border-top:1px solid var(--foot-line);color:var(--foot-2);font-size:12.5px}
+
+@media (max-width:1024px){
+  .guide{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;touch-action:pan-x pan-y;scrollbar-width:none;padding-bottom:14px}
+  .guide::-webkit-scrollbar{display:none}
+  .guide article{flex:0 0 min(300px,80%);scroll-snap-align:start}
+}
+@media (max-width:860px){
+  .nav .wrap{flex-wrap:wrap;height:auto;row-gap:0;padding-top:10px}
+  .nav ul{order:3;width:100%;margin:0;padding:8px 0 10px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:22px}
+  .nav ul::-webkit-scrollbar{display:none}
+  .nav ul a{display:inline-block;padding:6px 0}
+  .btn{min-height:44px}
+  .hero .wrap,.pause{grid-template-columns:1fr}
+  .mock .body{grid-template-columns:118px 1fr}
+  .svc>div{border-right:0;border-bottom:1px solid var(--line)}
+  section{padding-block:52px}
+  .pause{padding:24px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="logo" href="#top"><i></i>NAS Auto Test</a>
+    <ul>
+      <li><a href="#new">最新功能</a></li>
+      <li><a href="#coverage">測試涵蓋</a></li>
+      <li><a href="#pause">執行控制</a></li>
+      <li><a href="#guide">使用指南</a></li>
+      <li><a href="#svc">平台服務</a></li>
+    </ul>
+    <span class="sp"></span>
+    <a class="btn pri" href="#guide">開始使用</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Web-First · WD My Cloud EX2 Ultra</span>
+      <h1>勾選、按下開始，<br><em>59 項 NAS 測試</em>自己跑完。</h1>
+      <p class="lead">從 LAN 自動搜尋 NAS、即時 Log 串流，到 HTML / PDF 報告下載，一個瀏覽器頁面完成整個驗證流程。CLI 則保留給 CI/CD 與單一腳本除錯。</p>
+      <div class="cta">
+        <a class="btn pri" href="#guide">了解使用方式</a>
+        <a class="btn" href="#coverage">查看測試涵蓋</a>
+      </div>
+    </div>
+    <div class="mock" role="img" aria-label="測試儀表板示意圖（範例資料）">
+      <div class="bar"><b></b><b></b><b></b><span>localhost:8765</span></div>
+      <div class="body">
+        <div class="side">
+          <div class="f">192.168.x.x ▾</div>
+          <label>BAT · 12</label>
+          <label>認證 · 7</label>
+          <label>SMB · 4</label>
+          <label>NFS · 3</label>
+          <label class="off">韌體 · 6</label>
+        </div>
+        <div class="main">
+          <div class="ctl"><span class="on">開始</span><span>暫停</span><span>恢復</span><span>中斷</span></div>
+          <div class="prog"><i></i></div>
+          <div class="log">
+            <div><span class="d">10:42:01</span> <span class="p">PASS</span> BAT-01-01 登入</div>
+            <div><span class="d">10:42:06</span> <span class="p">PASS</span> BAT-02-01 Dashboard</div>
+            <div><span class="d">10:42:19</span> <span class="p">PASS</span> F-SMB-01 MD5 一致</div>
+            <div><span class="d">10:42:31</span> <span class="r">RUN </span> F-NFS-01 掛載中…</div>
+          </div>
+          <div style="font-size:11px;opacity:.5">示意畫面，非實際執行結果</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="new">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Highlights</span><h2>平台重點功能</h2></div><span style="color:var(--ink-2);font-size:14px">左右滑動查看更多</span></div>
+    <div class="rail">
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><circle cx="48" cy="48" r="8" fill="currentColor"/><circle cx="48" cy="48" r="24"/><circle cx="48" cy="48" r="40" opacity=".5"/></svg></div>
+        <div class="txt"><span class="tag">LAN DISCOVERY</span><h3>自動搜尋區網 NAS</h3><p>由後端掃描區網並推播結果，前端下拉選單直接選擇，不必手動查 IP。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><rect x="24" y="20" width="14" height="56" rx="3" fill="currentColor"/><rect x="58" y="20" width="14" height="56" rx="3" fill="currentColor"/></svg></div>
+        <div class="txt"><span class="tag">GRACEFUL PAUSE</span><h3>優雅暫停</h3><p>按下暫停後，當前 Test Case 會完整跑完才停住，保護 NAS 檔案系統的完整性。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M14 30h68M14 48h68M14 66h68"/><circle cx="30" cy="30" r="5" fill="currentColor"/><circle cx="60" cy="48" r="5" fill="currentColor"/><circle cx="40" cy="66" r="5" fill="currentColor"/></svg></div>
+        <div class="txt"><span class="tag">LIVE LOG</span><h3>即時 Log 與進度</h3><p>透過 WebSocket 串流執行狀態、Log 與進度條，過程一目了然。</p></div>
+      </article>
+      <article>
+        <div class="vis"><svg width="96" height="96" viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3"><path d="M26 12h30l16 16v56H26z"/><path d="M56 12v16h16M38 50h22M38 62h22M38 74h14"/></svg></div>
+        <div class="txt"><span class="tag">REPORTS</span><h3>多格式報告</h3><p>輸出 HTML / PDF 供閱讀，同步保留 JSON 與 JUnit XML 原始資料給 CI 使用。</p></div>
+      </article>
+    </div>
+    <div class="rail-ctl" data-for="rail">
+      <button type="button" data-dir="-1" aria-label="上一張">‹</button>
+      <div class="dots"></div>
+      <button type="button" data-dir="1" aria-label="下一張">›</button>
+    </div>
+  </div>
+</section>
+
+<section id="coverage" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Coverage</span><h2>測試涵蓋範圍</h2></div><p style="color:var(--ink-2);max-width:30em;font-size:15px">依 TEST_PLAN.md 劃分為 BAT 快速冒煙、FULL 完整測試與 UX 可用性測試。</p></div>
+    <div class="grid">
+      <div class="mod hl"><div class="n">12<small>案例</small></div><h3>BAT 冒煙測試</h3><div class="ids">BAT-01 … BAT-07</div></div>
+      <div class="mod"><div class="n">7<small>案例</small></div><h3>認證與 Session</h3><div class="ids">F-AUTH</div></div>
+      <div class="mod"><div class="n">6<small>案例</small></div><h3>Dashboard</h3><div class="ids">F-DASH</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>使用者管理</h3><div class="ids">F-USR</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>共享資料夾</h3><div class="ids">F-SHR</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>儲存 / 磁碟</h3><div class="ids">F-STR · F-DSK</div></div>
+      <div class="mod"><div class="n">1<small>案例</small></div><h3>General Settings</h3><div class="ids">F-GEN</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>FTP</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>SSH / SFTP</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">4<small>案例</small></div><h3>SMB</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">3<small>案例</small></div><h3>NFS</h3><div class="ids">含 MD5 校驗</div></div>
+      <div class="mod"><div class="n">6<small>案例</small></div><h3>韌體升級</h3><div class="ids">F-FW</div></div>
+      <div class="mod"><div class="n">2<small>案例</small></div><h3>UX / 可用性</h3><div class="ids">UX-01 · UX-10</div></div>
+    </div>
+    <div class="total"><span>合計</span><b>59</b><span>個測試案例　BAT 12 ＋ FULL 45 ＋ UX 2</span></div>
+  </div>
+</section>
+
+<section id="pause">
+  <div class="wrap">
+    <div class="pause">
+      <div>
+        <span class="eyebrow" style="color:#2997ff">Execution State Machine</span>
+        <h2>開始、暫停、恢復、中斷</h2>
+        <p>暫停不會打斷正在跑的測試。當前 Test Case 完整結束後，引擎才停在下一支之前，NAS 不會停在寫到一半的狀態。</p>
+      </div>
+      <div class="tl" aria-label="Graceful Pause 時間軸示意">
+        <div><span>Case N</span><span class="bar"><i class="g"></i></span></div>
+        <div><span>按下暫停 ▸</span><span class="bar"><i class="h"></i></span></div>
+        <div><span>Case N+1</span><span class="bar"><i class="z"></i></span></div>
+        <div class="note">Case N 跑完後 hold 住，按「恢復」才執行 Case N+1</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="guide" class="alt">
+  <div class="wrap">
+    <div class="sec-head"><div><span class="eyebrow">Quick Start</span><h2>四步驟完成一次驗證</h2></div></div>
+    <div class="guide">
+      <article><div class="thumb"><span class="pill">STEP 1</span><span>NAS ▾ 192.168.x.x</span></div><h3>選擇 NAS</h3><p>從下拉選單選取自動搜尋到的 NAS，或手動輸入 IP，再填入帳號密碼。</p></article>
+      <article><div class="thumb"><span class="pill">STEP 2</span><span>☑ BAT　☑ SMB　☐ FW</span></div><h3>勾選測試項目</h3><p>以樹狀選擇器選 BAT、FULL，或只挑單一 Test Case。</p></article>
+      <article><div class="thumb"><span class="pill">STEP 3</span><span>▶ 開始　❚❚ 暫停</span></div><h3>按下開始</h3><p>右側 Log 即時串流，隨時可暫停、恢復或中斷。</p></article>
+      <article><div class="thumb"><span class="pill">STEP 4</span><span>report_*.html / .pdf / .xml</span></div><h3>下載報告</h3><p>含高階摘要與詳細 Log，附 JSON 與 JUnit XML 原始資料。</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="svc">
+  <div class="wrap">
+    <div class="svc">
+      <div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="6" width="24" height="16" rx="2"/><path d="M12 28h8M16 22v6"/></svg>
+        <h3>Web-First</h3><p>一般測試人員用瀏覽器操作；同區網其他電腦可直接連線。</p>
+      </div>
+      <div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 10h20M6 16h20M6 22h20"/><path d="M12 6v20M20 6v20" opacity=".4"/></svg>
+        <h3>多協定驗證</h3><p>FTP、SSH/SFTP、SMB、NFS 全數以 MD5 確認檔案完整。</p>
+      </div>
+      <div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h24v16H4z"/><path d="M9 14l4 3-4 3M15 20h7"/></svg>
+        <h3>CLI 與 CI/CD</h3><p>Headless 執行、單一腳本除錯，可接上 CI/CD Pipeline。</p>
+      </div>
+      <div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4l10 4v8c0 6-4 10-10 12C10 26 6 22 6 16V8z"/><path d="M12 16l3 3 5-6"/></svg>
+        <h3>可擴充架構</h3><p>裝置抽象層隔離機型差異，同系列產品可共用測試。</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fcols">
+      <div><h4>測試</h4><ul><li>BAT 冒煙測試</li><li>FULL 完整測試</li><li>UX 可用性</li></ul></div>
+      <div><h4>後端</h4><ul><li>Python · FastAPI</li><li>Asyncio</li><li>WebSocket</li><li>Playwright</li></ul></div>
+      <div><h4>協定</h4><ul><li>SSH / SFTP</li><li>FTP</li><li>SMB</li><li>NFS</li></ul></div>
+      <div><h4>報告</h4><ul><li>HTML</li><li>PDF</li><li>JSON</li><li>JUnit XML</li></ul></div>
+      <div><h4>文件</h4><ul><li>TEST_PLAN.md</li><li>README.md</li><li>setup.sh</li></ul></div>
+    </div>
+    <div class="fbot">NAS Auto Test Framework · 以 WD My Cloud EX2 Ultra 為目標裝置 · 版面參考企業電子產品官網的資訊架構，內容為本專案原創。</div>
+  </div>
+</footer>
+<script>
+(function(){
+  function setup(ctl){
+    var rail=ctl.previousElementSibling,dots=ctl.querySelector('.dots');
+    var items=[].slice.call(rail.children),prev=ctl.querySelector('[data-dir="-1"]'),next=ctl.querySelector('[data-dir="1"]');
+    items.forEach(function(){dots.appendChild(document.createElement('i'))});
+    function idx(){var x=rail.scrollLeft,best=0,d=1e9;items.forEach(function(el,i){var k=Math.abs(el.offsetLeft-rail.offsetLeft-x);if(k<d){d=k;best=i}});return best}
+    function update(){var i=idx(),atEnd=rail.scrollLeft+rail.clientWidth>=rail.scrollWidth-2;
+      if(atEnd)i=items.length-1;
+      [].forEach.call(dots.children,function(d,n){d.className=n===i?'on':''});
+      prev.disabled=rail.scrollLeft<=2;next.disabled=atEnd}
+    function go(dir){var i=Math.max(0,Math.min(items.length-1,idx()+dir));rail.scrollTo({left:items[i].offsetLeft-rail.offsetLeft,behavior:'smooth'})}
+    prev.onclick=function(){go(-1)};next.onclick=function(){go(1)};
+    rail.addEventListener('scroll',function(){requestAnimationFrame(update)},{passive:true});
+    window.addEventListener('resize',update);
+    rail.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')go(-1);if(e.key==='ArrowRight')go(1)});
+    rail.tabIndex=0;
+    var down=false,sx=0,sl=0,moved=false;
+    rail.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;down=true;moved=false;sx=e.clientX;sl=rail.scrollLeft});
+    window.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-sx;if(Math.abs(dx)>4){moved=true;rail.classList.add('drag')}if(moved)rail.scrollLeft=sl-dx});
+    window.addEventListener('pointerup',function(){if(!down)return;down=false;rail.classList.remove('drag');if(moved)go(0)});
+    update();
+  }
+  [].forEach.call(document.querySelectorAll('.rail-ctl'),setup);
+})();
+</script>
+</body>
+</html>
