@@ -364,7 +364,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
     <div class="topo-scroll">
     <svg class="topo" viewBox="0 0 1000 480" role="img" aria-labelledby="topo-t topo-d">
       <title id="topo-t">硬體架設配置圖</title>
-      <desc id="topo-d">操作端與 CI/CD 連到測試主機，測試主機經區網交換器透過 HTTP、SSH、FTP、SMB、NFS 測試 NAS。</desc>
+      <desc id="topo-d">操作端連到測試主機，測試主機經區網交換器透過 HTTP、SSH、FTP、SMB、NFS 測試 NAS。</desc>
       <defs>
         <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arrow"/></marker>
         <marker id="aa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="arrow-a"/></marker>
@@ -375,6 +375,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
       <text x="250" y="46" class="mono">同一個局域網 (LAN)　測試機與 NAS 須在同網段</text>
 
       <!-- operator -->
+      <g transform="translate(0,95)">
       <rect x="20" y="70" width="180" height="150" rx="14" class="box"/>
       <text x="110" y="100" text-anchor="middle" class="ttl">操作端</text>
       <rect x="52" y="116" width="116" height="76" rx="9" class="inner"/>
@@ -382,13 +383,7 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
       <path d="M68 164l16-14 14 10 18-20 34 24" transform="translate(-6,-4) scale(.9)" stroke="var(--accent)" stroke-width="2" fill="none"/>
       <circle cx="110" cy="187" r="2.2" fill="var(--ink-2)"/>
       <text x="110" y="210" text-anchor="middle" class="sub">iPad · 筆電 · 手機</text>
-
-      <!-- CI -->
-      <rect x="20" y="290" width="180" height="120" rx="14" class="box"/>
-      <text x="110" y="320" text-anchor="middle" class="ttl">CI/CD 或開發者</text>
-      <rect x="50" y="336" width="120" height="44" rx="6" class="inner"/>
-      <text x="62" y="363" class="mono">POST /api/start</text>
-      <text x="110" y="398" text-anchor="middle" class="sub">REST API 觸發</text>
+      </g>
 
       <!-- host -->
       <rect x="280" y="70" width="330" height="340" rx="16" class="host"/>
@@ -414,12 +409,12 @@ footer{background:var(--foot);color:var(--foot-ink);padding-block:56px 36px;font
       <text x="320" y="373" class="mono">HTML · PDF · JSON · JUnit XML → reports/</text>
 
       <!-- operator -> host -->
+      <g transform="translate(0,95)">
       <path d="M200 145H280" class="wire" marker-end="url(#ah)" marker-start="url(#ah)"/>
       <rect x="203" y="98" width="74" height="34" rx="6" class="lbl"/>
       <text x="240" y="113" text-anchor="middle" class="mono">HTTP</text>
       <text x="240" y="126" text-anchor="middle" class="mono">:8765</text>
-      <path d="M200 350H280" class="wire" marker-end="url(#ah)"/>
-      <text x="240" y="342" text-anchor="middle" class="mono">API</text>
+      </g>
 
       <!-- host -> switch -->
       <path d="M610 240H700" class="lan" marker-end="url(#aa)" marker-start="url(#aa)"/>
