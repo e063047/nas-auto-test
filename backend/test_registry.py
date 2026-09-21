@@ -190,7 +190,13 @@ async def bat_05_02(nas_ip, nas_user, nas_pass):
         await page.get_by_text("Storage", exact=True).first.click()
         await page.wait_for_load_state("networkidle", timeout=8000)
         await page.click("text=Disk Status")
-        await asyncio.sleep(1.5)
+        try:
+            await page.wait_for_function(
+                "() => { const t = document.body.innerText; return t.includes('Drive') && (t.includes('Good') || t.includes('°C')); }",
+                timeout=10000,
+            )
+        except Exception:
+            pass
         body = await page.inner_text("body")
         ss = await _capture(page, "BAT-05-02")
         await browser.close()
