@@ -257,6 +257,27 @@ footer{padding-block:32px;border-top:1px solid var(--line);color:var(--ink-2);fo
       <a class="btn" href="https://e063047.github.io/nas-auto-test/nas-intro.html">查看專案介紹頁</a>
       <a class="btn ghost" href="https://github.com/e063047/nas-auto-test">GitHub 原始碼</a>
     </div>
+
+    <div style="border-top:1px solid var(--line,#d8dee6);margin:56px 0 0"></div>
+    <h2 class="h2" style="margin-top:40px">HOBOT Auto Test：擦窗機器人 App 測試自動化專案範例</h2>
+    <p class="lead">同樣以 Claude Code 協作開發：用 iPhone 實機驅動 HOBOT App，串接機器人實際清潔動作，並把測試網頁、手機畫面與機器人實拍錄成同步影片作為驗證證據。</p>
+    <div class="steps">
+      <div class="step"><h3>背景與動機</h3><ul><li>App 每次改版都得在實機重測登入、配對、清潔與遙控，重複性高</li><li>測試會讓機器人真的移動，需要兼顧效率與實體安全</li></ul></div>
+      <div class="step"><h3>我的角色</h3><ul><li>規劃測項分類與安全規則（機器人貼玻璃確認、會解除配對的項目預設不勾選）</li><li>審核 AI 產出的測試流程與實機結果</li></ul></div>
+      <div class="step"><h3>AI 執行策略</h3><ul><li>先寫設計文件與實作計畫，經我審核才開發</li><li>以單元測試保護網頁工具與報告邏輯</li><li>每個功能都回到 iPhone 實機驗證</li></ul></div>
+      <div class="step"><h3>具體成果</h3><ul><li>12 個測項：基本功能、機器人配對、清潔與遙控</li><li>網頁工具可挑選測項、即時進度 LOG、暫停／繼續／結束</li><li>自動產出 HTML／PDF 報告，帳號自動遮蔽</li><li>實機驗證：配對與 4 項清潔與遙控測項全數通過</li></ul></div>
+    </div>
+    <div class="goal"><b>目標</b>讓測試人員在網頁上一鍵完成 App 與機器人的實機驗證，並留下三畫面影片與報告作為證據</div>
+    <h3 class="tools-h">技術工具與方法</h3>
+    <div class="tools">
+      <div class="tool"><b>程式語言與技術</b><ul><li>Python、pytest（測項與網頁工具後端）</li><li>Appium 3＋XCUITest（iPhone 實機自動化）</li><li>ffmpeg（測試網頁、手機、機器人三畫面錄影合成）</li></ul></div>
+      <div class="tool"><b>方法</b><ul><li>設計文件→實作計畫→實機驗證</li><li>硬體安全防護與人工確認</li></ul></div>
+      <div class="tool"><b>報告與視覺化</b><ul><li>即時進度 LOG</li><li>HTML／PDF 測試報告</li><li>實機錄影</li></ul></div>
+    </div>
+    <div class="links">
+      <a class="btn" href="https://e063047.github.io/hobot-auto-test/intro/hobot-intro.html">查看專案介紹頁</a>
+      <a class="btn ghost" href="https://github.com/e063047/hobot-auto-test">GitHub 原始碼</a>
+    </div>
   </div>
 </section>
 </main>
